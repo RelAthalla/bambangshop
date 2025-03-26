@@ -78,12 +78,35 @@ This is the place for you to write reflections:
 
 #### Reflection Publisher-1
 
-1. Observer Interface vs. Model Struct: In traditional Observer patterns, defining a Subscriber interface (or trait) allows different kinds of subscribers to receive notifications. In this BambangShop case, if all subscribers behave uniformly and no polymorphic behavior is needed, a single model struct may be sufficient. The trade-off is flexibility versus simplicity—if you plan to extend subscriber behavior in the future, a trait would help.
+1. **Observer Interface vs. Model Struct:** 
+    In traditional Observer patterns, defining a Subscriber interface (or trait) allows different kinds of subscribers to receive notifications. In this BambangShop case, if all subscribers behave uniformly and no polymorphic behavior is needed, a single model struct may be sufficient. The trade-off is flexibility versus simplicity—if you plan to extend subscriber behavior in the future, a trait would help.
 
-2. Vec vs. DashMap for Unique Identifiers: Using a DashMap (or a similar dictionary) is appropriate here because both the product's id and a subscriber's url are unique. A map provides efficient lookup, insertion, and deletion by key. If you used a Vec, you would need to iterate over the entire list to check uniqueness or remove an element, which is inefficient for large collections.
+2. **Vec vs. DashMap for Unique Identifiers:** 
+    Using a DashMap (or a similar dictionary) is appropriate here because both the product's id and a subscriber's url are unique. A map provides efficient lookup, insertion, and deletion by key. If you used a Vec, you would need to iterate over the entire list to check uniqueness or remove an element, which is inefficient for large collections.
 
-3. DashMap vs. Singleton for Thread Safety: Although the Singleton pattern can ensure a single instance, it does not inherently solve concurrent access issues in a multi-threaded environment. In Rust, using DashMap directly addresses thread-safety by ensuring that concurrent reads/writes are managed correctly. Hence, for our subscribers static storage, a thread-safe container like DashMap is necessary rather than a plain Singleton pattern.
+3. **DashMap vs. Singleton for Thread Safety:** 
+    Although the Singleton pattern can ensure a single instance, it does not inherently solve concurrent access issues in a multi-threaded environment. In Rust, using DashMap directly addresses thread-safety by ensuring that concurrent reads/writes are managed correctly. Hence, for our subscribers static storage, a thread-safe container like DashMap is necessary rather than a plain Singleton pattern.
 
 #### Reflection Publisher-2
+
+1. **Separation of Service and Repository from Model:**  
+   In the classic MVC pattern, the “Model” is responsible for holding the data. However, when you mix in business logic and database access within the model itself, you risk overloading a single component with multiple responsibilities. Separating the Service and Repository layers brings clear boundaries:
+   - The **Repository** handles data storage and retrieval, isolating the data access logic.
+   - The **Service** encapsulates business logic, which may involve processing data from multiple repositories or applying specific rules before interacting with the model.
+   This division adheres to the Single Responsibility Principle, improves testability, and makes the code more maintainable and scalable.
+
+2. **Implications of Using Only the Model:**  
+   If we were to use only the Model to cover data, business logic, and storage, each model (e.g., Product, Subscriber, Notification) would become overly complex. The interactions between these objects would be tightly coupled:
+   - A change in the data storage mechanism would force modifications in business logic and vice versa.
+   - Business rules might end up scattered across different models, causing duplicated logic and making debugging or enhancements more challenging.
+   This tight coupling increases overall code complexity and decreases the modularity of the system, making the system harder to extend or maintain.
+
+3. **Exploring Postman for Testing:**  
+   Postman has been incredibly useful for testing our REST API endpoints. It allows us to:
+   - **Manually send HTTP requests** to verify that endpoints behave as expected.
+   - **Organize requests into collections**, which helps when testing multiple related endpoints during development.
+   - **Automate tests** using scripting, which is beneficial when validating responses and ensuring regressions are caught early.
+   - **Leverage environment variables** to easily switch between different deployment settings (e.g., local development versus production).
+   These features not only streamline testing for this project but are invaluable for future software engineering projects or group work, as they help ensure the API’s reliability and simplify troubleshooting.
 
 #### Reflection Publisher-3
