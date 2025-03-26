@@ -110,3 +110,18 @@ This is the place for you to write reflections:
    These features not only streamline testing for this project but are invaluable for future software engineering projects or group work, as they help ensure the API’s reliability and simplify troubleshooting.
 
 #### Reflection Publisher-3
+
+1. **Observer Pattern Variation in This Tutorial:**  
+   In this tutorial, we are using the **Push** variation of the Observer Pattern. In our implementation, when a product is created, deleted, or promoted, the publisher immediately pushes a notification payload to each subscriber via an HTTP POST request.
+
+2. **Considering the Pull Variation:**  
+   If we were to use the **Pull** variation instead, the subscribers would instead request updates from the publisher on demand.  
+   - **Advantages of the Pull Model:**  
+     - Decouples the publisher from the timing of notifications—subscribers retrieve information only when needed.  
+     - Potentially reduces unnecessary network calls if subscribers check infrequently.  
+   - **Disadvantages of the Pull Model:**  
+     - Increases complexity, as subscribers must implement logic to repeatedly poll the publisher for updates.  
+     - May lead to delays in receiving notifications and increased load due to frequent polling, especially if updates are infrequent.
+  
+3. **Impact of Not Using Multi-threading in the Notification Process:**  
+   Our current implementation spawns a separate thread for each notification sent to a subscriber. Without multi-threading, the notification process would operate sequentially. This means that if one subscriber takes a long time to process the request or encounters a delay, it would block the notification of subsequent subscribers. Overall, this would slow down the notification process and potentially decrease the responsiveness of the entire application.
