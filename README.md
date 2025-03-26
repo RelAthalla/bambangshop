@@ -78,6 +78,12 @@ This is the place for you to write reflections:
 
 #### Reflection Publisher-1
 
+1. Observer Interface vs. Model Struct: In traditional Observer patterns, defining a Subscriber interface (or trait) allows different kinds of subscribers to receive notifications. In this BambangShop case, if all subscribers behave uniformly and no polymorphic behavior is needed, a single model struct may be sufficient. The trade-off is flexibility versus simplicity—if you plan to extend subscriber behavior in the future, a trait would help.
+
+2. Vec vs. DashMap for Unique Identifiers: Using a DashMap (or a similar dictionary) is appropriate here because both the product's id and a subscriber's url are unique. A map provides efficient lookup, insertion, and deletion by key. If you used a Vec, you would need to iterate over the entire list to check uniqueness or remove an element, which is inefficient for large collections.
+
+3. DashMap vs. Singleton for Thread Safety: Although the Singleton pattern can ensure a single instance, it does not inherently solve concurrent access issues in a multi-threaded environment. In Rust, using DashMap directly addresses thread-safety by ensuring that concurrent reads/writes are managed correctly. Hence, for our subscribers static storage, a thread-safe container like DashMap is necessary rather than a plain Singleton pattern.
+
 #### Reflection Publisher-2
 
 #### Reflection Publisher-3
